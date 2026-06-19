@@ -1,0 +1,16 @@
+services:
+  vetrina:
+    build: .
+    container_name: gdb-labs-vetrina
+    restart: unless-stopped
+    ports:
+      - "8003:8003"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - gdb-net
+
+networks:
+  gdb-net:
+    driver: bridge
