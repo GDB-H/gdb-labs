@@ -8,15 +8,15 @@ import Archivi from './pages/Archivi';
 import Dialogo from './pages/Dialogo';
 
 // ==========================================
-// PALETTE "Blueprint Noir & Neon"
+// PALETTE "Dark Blueprint"
 // ==========================================
 export const theme = {
-  bg: '#050507',
+  bg: '#0a0a0f',
   grid: '#1e293b',
   text: '#f1f5f9',
   muted: '#64748b',
-  accentRed: '#ff0055',
-  accentCyan: '#00f0ff',
+  accentRed: '#ff0055', // keep original neon
+  accentCyan: '#00f0ff', // keep original neon but base will be softer
 };
 
 // ==========================================
