@@ -1,48 +1,53 @@
+@import 'lenis/dist/lenis.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .interactive {
-    @apply cursor-pointer;
+@layer base {
+  html {
+    position: relative; /* serve a framer-motion per misurare lo scroll delle sezioni */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans;
+    margin: 0;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  ::selection {
+    @apply bg-accent text-white;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-paper;
+  }
+
+  /* Grana leggera su tutta la pagina: dà materia alle superfici piatte */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply text-[0.78rem] font-medium uppercase tracking-[0.14em];
+  }
+
+  .accent-serif {
+    @apply font-serif font-normal italic tracking-[-0.01em];
+  }
 }
-
-body {
-  margin: 0;
-}
-
-/* Dark Blueprint SVG Styles */
-.svg-blueprint {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.95;
-    pointer-events: none;
-}
-
-.bp-grid { fill: url(#cadGrid); }
-.bp-thick { stroke: #00f0ff; stroke-width: 3; fill: none; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(0,240,255,0.5)); }
-.bp-med { stroke: #0ea5e9; stroke-width: 1.5; fill: none; stroke-linejoin: round; }
-.bp-thin { stroke: #3b82f6; stroke-width: 0.75; fill: none; }
-.bp-dashed { stroke: #0ea5e9; stroke-width: 1.5; fill: none; stroke-dasharray: 10,8; }
-.bp-dashed-thin { stroke: #3b82f6; stroke-width: 0.75; fill: none; stroke-dasharray: 4,4; }
-.bp-fill { fill: #00f0ff; }
-.bp-hatch { fill: url(#diagonalHatch); }
-.bp-crosshatch { fill: url(#crossHatch); }
-.bp-ground { fill: url(#groundHatch); }
-
-.bp-text-title { font-family: 'Courier New', Courier, monospace; font-size: 18px; font-weight: 900; fill: #00f0ff; letter-spacing: -0.5px; }
-.bp-text { font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; fill: #38bdf8; }
-.bp-text-small { font-family: 'Courier New', Courier, monospace; font-size: 9px; fill: #7dd3fc; }
-.bp-dim { font-family: 'Arial', sans-serif; font-size: 10px; fill: #0ea5e9; }
-
-.leader-line { stroke: #0ea5e9; stroke-width: 1.5; fill: none; }
-.leader-dot { fill: #0ea5e9; }
-.dim-line { stroke: #0284c7; stroke-width: 0.75; fill: none; marker-start: url(#arrowStart); marker-end: url(#arrowEnd); }
-.dim-ext { stroke: #0284c7; stroke-width: 0.75; fill: none; }
-
