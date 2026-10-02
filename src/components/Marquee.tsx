@@ -9,7 +9,7 @@ import {
   useTransform,
   useVelocity,
 } from 'framer-motion';
-import { marquee } from '../content';
+import { useT } from '../i18n';
 
 const wrap = (min: number, max: number, v: number) => {
   const range = max - min;
@@ -59,8 +59,9 @@ function Spark({ className = '' }: { className?: string }) {
 }
 
 export default function Marquee() {
+  const { marquee } = useT();
   return (
-    <section aria-label="Discipline e tecnologie" className="select-none overflow-hidden border-y border-line py-8 md:py-12">
+    <section aria-label={marquee.label} className="select-none overflow-hidden border-y border-line py-8 md:py-12">
       <VelocityRow baseVelocity={-1.6}>
         {marquee.disciplines.map((item) => (
           <span key={item} className="flex items-center text-[clamp(2.2rem,6vw,5.5rem)] font-medium leading-none tracking-[-0.04em]">

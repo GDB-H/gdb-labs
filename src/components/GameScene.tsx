@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react';
+import type { Content } from '../content';
+import { useT } from '../i18n';
 import { prefersReducedMotion } from '../lib/scroll';
+
+type Labels = Content['visuals']['game'];
 
 /*
  * "Lanterna": un piccolo platformer immaginario che attraversa le fasi di
@@ -163,7 +167,7 @@ function hero(ctx: Ctx, pose: Pose, t: number, body: string, lantern: string | n
 // ----------------------------------------------------------------
 // Fase 0 — Idea: schizzo su carta
 // ----------------------------------------------------------------
-function drawIdea(ctx: Ctx, t: number, pose: Pose) {
+function drawIdea(ctx: Ctx, t: number, pose: Pose, L: Labels) {
   ctx.fillStyle = '#F2EEE5';
   ctx.fillRect(0, 0, W, H);
   ctx.strokeStyle = 'rgba(70,110,200,0.14)';
@@ -223,12 +227,13 @@ function drawIdea(ctx: Ctx, t: number, pose: Pose) {
 
   ctx.fillStyle = 'rgba(30,30,36,0.78)';
   ctx.font = 'italic 30px "Instrument Serif", Georgia, serif';
-  ctx.fillText('Lanterna', 92, 92);
+  ctx.fillText(L.title, 92, 92);
+  const titleWidth = ctx.measureText(L.title).width;
   ctx.font = 'italic 21px "Instrument Serif", Georgia, serif';
-  ctx.fillText('— idea di gioco', 196, 92);
-  ctx.fillText('salto!', 270, 262);
-  ctx.fillText('luna enorme, luce calda', 470, 236);
-  ctx.fillText('lei porta la luce', 122, 470);
+  ctx.fillText(L.idea, 100 + titleWidth, 92);
+  ctx.fillText(L.jump, 270, 262);
+  ctx.fillText(L.moon, 470, 236);
+  ctx.fillText(L.light, 122, 470);
   pencil(ctx, [[92, 102], [190, 99]], 1.4, seed + 15);
 
   // la "mano" che sta ancora disegnando
@@ -394,7 +399,7 @@ function drawAlpha(ctx: Ctx, t: number, pose: Pose) {
 // ----------------------------------------------------------------
 // Fase 3/4 — Beta e Demo: luce, profondità, atmosfera
 // ----------------------------------------------------------------
-function drawNight(ctx: Ctx, t: number, pose: Pose, demo: boolean) {
+function drawNight(ctx: Ctx, t: number, pose: Pose, demo: boolean, L: Labels) {
   const sky = ctx.createLinearGradient(0, 0, 0, H);
   sky.addColorStop(0, '#0A0F26');
   sky.addColorStop(0.45, '#251E4A');
@@ -532,24 +537,33 @@ function drawNight(ctx: Ctx, t: number, pose: Pose, demo: boolean) {
     ctx.shadowBlur = 30;
     ctx.fillStyle = '#FFF3E0';
     ctx.font = 'italic 92px "Instrument Serif", Georgia, serif';
-    ctx.fillText('Lanterna', W / 2, 200);
+    ctx.fillText(L.title, W / 2, 200);
     ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(255,243,224,0.7)';
     ctx.font = '500 15px "Inter Tight", system-ui, sans-serif';
-    ctx.fillText('D E M O   G I O C A B I L E', W / 2, 236);
+    ctx.fillText(L.demo.split('').join(' '), W / 2, 236);
     const blink = (Math.sin(t * 3.2) + 1) / 2;
     ctx.fillStyle = `rgba(255,243,224,${0.35 + blink * 0.6})`;
     ctx.font = '600 17px "Inter Tight", system-ui, sans-serif';
-    ctx.fillText('PREMI  START', W / 2, 452);
+    ctx.fillText(L.start, W / 2, 452);
     ctx.restore();
   }
 }
 
-const STAGES = [drawIdea, drawPreAlpha, drawAlpha, (c: Ctx, t: number, p: Pose) => drawNight(c, t, p, false), (c: Ctx, t: number, p: Pose) => drawNight(c, t, p, true)];
+const STAGES: ((c: Ctx, t: number, p: Pose, L: Labels) => void)[] = [
+  drawIdea,
+  drawPreAlpha,
+  drawAlpha,
+  (c, t, p, L) => drawNight(c, t, p, false, L),
+  (c, t, p, L) => drawNight(c, t, p, true, L),
+];
 
 export default function GameScene({ stage }: { stage: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const target = useRef(stage);
+  const gameLabels = useT().visuals.game;
+  const labels = useRef<Labels>(gameLabels);
+  labels.current = gameLabels;
   target.current = Math.max(0, Math.min(STAGES.length - 1, stage));
 
   useEffect(() => {
@@ -603,10 +617,10 @@ export default function GameScene({ stage }: { stage: number }) {
 
       const pose = poseAt(clock);
       ctx.globalAlpha = 1;
-      STAGES[from](ctx, clock, pose);
+      STAGES[from](ctx, clock, pose, labels.current);
       if (mix < 1 || from !== to) {
         ctx.globalAlpha = ease(mix);
-        STAGES[to](ctx, clock, pose);
+        STAGES[to](ctx, clock, pose, labels.current);
         ctx.globalAlpha = 1;
         if (mix >= 1) from = to;
       }

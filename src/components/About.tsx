@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
-import { about } from '../content';
+import { useT } from '../i18n';
 import { FadeUp, SectionLabel } from './ui';
 
 function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
@@ -30,11 +30,12 @@ function ScrollStatement({ text }: { text: string }) {
 }
 
 export default function About() {
+  const { about } = useT();
   return (
     <section id="chi-sono" className="container-x py-28 md:py-40">
       <div className="grid gap-10 md:grid-cols-12">
         <div className="md:col-span-3">
-          <SectionLabel index="05">Chi sono</SectionLabel>
+          <SectionLabel index="05">{about.label}</SectionLabel>
         </div>
         <div className="md:col-span-9">
           <ScrollStatement text={about.statement} />
@@ -52,7 +53,7 @@ export default function About() {
 
         <div className="md:col-span-3 md:col-start-10">
           <FadeUp>
-            <p className="eyebrow mb-6 text-muted">Principi</p>
+            <p className="eyebrow mb-6 text-muted">{about.principlesLabel}</p>
           </FadeUp>
           <ul className="space-y-8 border-t border-line pt-8">
             {about.principles.map((pr, i) => (

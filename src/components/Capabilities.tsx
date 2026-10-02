@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { capabilities, type Capability } from '../content';
+import type { Capability } from '../content';
+import { useT } from '../i18n';
 import { useMediaQuery } from '../lib/hooks';
 import { RevealLines, SectionLabel } from './ui';
 
@@ -34,6 +35,8 @@ function CapabilityCard({ cap, index, total }: { cap: Capability; index: number;
  * normale galleria scorrevole.
  */
 export default function Capabilities() {
+  const { capabilities: copy } = useT();
+  const capabilities = copy.items;
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [distance, setDistance] = useState(0);
@@ -70,21 +73,21 @@ export default function Capabilities() {
       <div className={pinned ? 'sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden py-20' : 'py-28'}>
         <div className="container-x grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-3">
-            <SectionLabel index="02">Competenze</SectionLabel>
+            <SectionLabel index="02">{copy.label}</SectionLabel>
           </div>
           <div className="md:col-span-6">
             <RevealLines
               className="text-[clamp(2.2rem,4.6vw,4.4rem)] font-medium leading-[0.98] tracking-[-0.04em]"
               lines={[
-                'Cinque discipline,',
+                copy.title[0],
                 <>
-                  <em className="accent-serif">un solo metodo.</em>
+                  <em className="accent-serif">{copy.title[1]}</em>
                 </>,
               ]}
             />
           </div>
           <div className="hidden items-center gap-4 md:col-span-3 md:flex md:justify-end">
-            <span className="text-sm text-muted">{pinned ? 'Scorri' : 'Trascina'}</span>
+            <span className="text-sm text-muted">{pinned ? copy.scroll : copy.drag}</span>
             <span className="relative h-px w-28 overflow-hidden bg-line">
               <motion.span className="absolute inset-0 origin-left bg-ink" style={{ scaleX: pinned ? progress : 1 }} />
             </span>
@@ -101,11 +104,10 @@ export default function Capabilities() {
           ))}
           <div className="flex w-[70vw] shrink-0 flex-col justify-center sm:w-[40vw] md:w-[320px]">
             <p className="text-[1.4rem] font-medium leading-snug tracking-[-0.02em] md:text-[1.6rem]">
-              Il profilo trasversale è una scelta: vedere il problema per intero porta a soluzioni{' '}
-              <em className="accent-serif">più semplici.</em>
+              {copy.outro[0]} <em className="accent-serif">{copy.outro[1]}</em>
             </p>
             <a href="#casi" className="mt-6 inline-flex items-center gap-2 text-[0.95rem] text-accent">
-              Guarda come lavoro <span aria-hidden>→</span>
+              {copy.outroLink} <span aria-hidden>→</span>
             </a>
           </div>
         </motion.div>

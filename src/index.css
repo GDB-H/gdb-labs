@@ -15,7 +15,13 @@
   body {
     @apply bg-paper text-ink font-sans;
     margin: 0;
+    transition: text-shadow 0.45s ease;
     font-feature-settings: 'ss01', 'cv11';
+  }
+
+  /* durante il cambio lingua il testo prende un lieve bagliore, come metallo caldo */
+  html.is-transmuting body {
+    text-shadow: 0 0 14px rgba(238, 84, 32, 0.38);
   }
 
   ::selection {

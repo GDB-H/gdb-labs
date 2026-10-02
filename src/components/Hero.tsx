@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
-import { hero } from '../content';
+import { useT } from '../i18n';
 import DotField from './DotField';
 import { Button, Magnetic, RevealLines, ease } from './ui';
 
@@ -32,9 +32,10 @@ function Rotator({ words, interval = 2600 }: { words: string[]; interval?: numbe
 }
 
 function RotatingBadge() {
-  const text = 'Parliamo del tuo progetto · GDB Labs · ';
+  const t = useT();
+  const text = t.hero.badge;
   return (
-    <a href="#contatti" aria-label="Vai ai contatti" className="group relative block h-40 w-40 shrink-0 xl:h-44 xl:w-44">
+    <a href="#contatti" aria-label={t.hero.badgeAria} className="group relative block h-40 w-40 shrink-0 xl:h-44 xl:w-44">
       <svg viewBox="0 0 200 200" className="h-full w-full animate-[spin_22s_linear_infinite] text-ink" aria-hidden>
         <defs>
           <path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
@@ -54,6 +55,7 @@ function RotatingBadge() {
 
 export default function Hero({ startDelay = 0 }: { startDelay?: number }) {
   const d = startDelay;
+  const { hero } = useT();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
@@ -93,9 +95,9 @@ export default function Hero({ startDelay = 0 }: { startDelay?: number }) {
             delay={d + 0.15}
             className="text-display-1 font-medium"
             lines={[
-              'Dal problema',
+              hero.title[0],
               <>
-                al <em className="accent-serif">prodotto.</em>
+                {hero.title[1]} <em className="accent-serif">{hero.title[2]}</em>
               </>,
             ]}
           />
@@ -129,11 +131,11 @@ export default function Hero({ startDelay = 0 }: { startDelay?: number }) {
           >
             <Magnetic>
               <Button href="#contatti" variant="ink">
-                Parliamo del tuo progetto
+                {hero.ctaPrimary}
               </Button>
             </Magnetic>
             <Button href="#laboratorio" variant="ghost" icon={false}>
-              Entra nel laboratorio
+              {hero.ctaSecondary}
             </Button>
           </motion.div>
         </div>
@@ -149,18 +151,18 @@ export default function Hero({ startDelay = 0 }: { startDelay?: number }) {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
             </span>
-            <span>Disponibile per nuovi progetti</span>
+            <span>{hero.available}</span>
           </div>
 
-          <div className="hidden items-center justify-center gap-2 md:flex">
-            <span className="text-muted">Sul banco —</span>
+          <div className="hidden items-center justify-center gap-2 whitespace-nowrap md:flex">
+            <span className="text-muted">{hero.focus}</span>
             <span className="font-medium">
               <Rotator words={hero.rotating} />
             </span>
           </div>
 
           <a href="#laboratorio" className="group flex items-center justify-end gap-3 text-muted transition-colors hover:text-ink">
-            Scorri
+            {hero.scroll}
             <span className="relative h-8 w-px overflow-hidden bg-line">
               <motion.span
                 className="absolute inset-x-0 top-0 h-1/2 bg-ink"

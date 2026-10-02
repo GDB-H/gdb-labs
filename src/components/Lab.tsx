@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion';
-import { lab, type Bench } from '../content';
+import type { Bench } from '../content';
+import { useT } from '../i18n';
 import { useMediaQuery } from '../lib/hooks';
 import { ProjectVisual } from './ProjectVisuals';
 import { FadeUp, RevealLines, SectionLabel, ease } from './ui';
@@ -66,6 +67,7 @@ function BenchTile({ bench, index }: { bench: Bench; index: number }) {
  * e, scorrendo, si espande fino a riempire lo schermo; poi compare il titolo.
  */
 function LabIntro() {
+  const { lab } = useT();
   const ref = useRef<HTMLDivElement>(null);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
@@ -98,7 +100,7 @@ function LabIntro() {
         </motion.div>
 
         <motion.div className="container-x absolute inset-x-0 top-[9%] md:top-[7%]" style={{ opacity: chrome }}>
-          <SectionLabel index="01">Il laboratorio</SectionLabel>
+          <SectionLabel index="01">{lab.label}</SectionLabel>
         </motion.div>
         <motion.p
           className="container-x absolute inset-x-0 bottom-[9%] text-center text-[0.95rem] text-ink/60 md:bottom-[7%]"
@@ -109,9 +111,9 @@ function LabIntro() {
 
         <div className="container-x absolute inset-0 flex flex-col items-center justify-center text-center text-paper">
           <motion.h2 className="text-display-1 font-medium" style={{ opacity: titleOpacity, y: titleY, scale: titleScale }}>
-            Un laboratorio,
+            {lab.title[0]}
             <br />
-            <em className="accent-serif">non un’agenzia.</em>
+            <em className="accent-serif">{lab.title[1]}</em>
           </motion.h2>
           <motion.p
             className="mt-8 max-w-2xl text-lg leading-relaxed text-paper/80 md:mt-10 md:text-xl"
@@ -126,6 +128,7 @@ function LabIntro() {
 }
 
 export default function Lab() {
+  const { lab } = useT();
   return (
     <section id="laboratorio">
       <LabIntro />
@@ -133,14 +136,14 @@ export default function Lab() {
       <div className="container-x pb-28 pt-24 md:pb-40 md:pt-32">
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-3">
-            <p className="eyebrow text-muted">I banchi di lavoro</p>
+            <p className="eyebrow text-muted">{lab.benchesLabel}</p>
           </div>
           <RevealLines
             className="text-display-3 font-medium md:col-span-9 md:text-[clamp(2rem,4vw,3.6rem)]"
             lines={[
-              'Discipline diverse, sullo stesso banco.',
+              lab.benchesTitle[0],
               <>
-                <em className="accent-serif">Ognuna rende migliori le altre.</em>
+                <em className="accent-serif">{lab.benchesTitle[1]}</em>
               </>,
             ]}
           />

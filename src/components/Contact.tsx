@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { Check, Copy } from 'lucide-react';
-import { contact, site } from '../content';
+import { site } from '../content';
+import { useT } from '../i18n';
 import { scrollToTarget } from '../lib/scroll';
 import { Button, FadeUp, LogoMark, Magnetic, RevealLines, RollText, SectionLabel, ease } from './ui';
 
@@ -38,30 +39,33 @@ function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [topics, setTopics] = useState<string[]>([]);
+  // si salvano gli indici, così la scelta sopravvive al cambio lingua
+  const [picked, setPicked] = useState<number[]>([]);
+  const { contact } = useT();
 
-  const toggle = (t: string) => setTopics((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+  const toggle = (i: number) => setPicked((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]));
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    const subject = `Nuovo progetto — ${name}`;
-    const body = `${message}\n\n${topics.length ? `Ambito: ${topics.join(', ')}\n` : ''}${name} · ${email}`;
+    const topics = picked.map((i) => contact.topics[i]);
+    const subject = `${contact.subject} — ${name}`;
+    const body = `${message}\n\n${topics.length ? `${contact.scope}: ${topics.join(', ')}\n` : ''}${name} · ${email}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
     <form onSubmit={submit} className="rounded-[1.6rem] bg-ink-2 p-6 sm:p-8 md:p-10">
       <fieldset>
-        <legend className="eyebrow mb-4 text-muted-dark">Di cosa hai bisogno?</legend>
+        <legend className="eyebrow mb-4 text-muted-dark">{contact.need}</legend>
         <div className="flex flex-wrap gap-2">
-          {contact.topics.map((t) => {
-            const on = topics.includes(t);
+          {contact.topics.map((t, i) => {
+            const on = picked.includes(i);
             return (
               <button
-                key={t}
+                key={i}
                 type="button"
                 aria-pressed={on}
-                onClick={() => toggle(t)}
+                onClick={() => toggle(i)}
                 className={`rounded-full border px-4 py-2 text-[0.92rem] transition-all duration-300 ${
                   on ? 'border-accent bg-accent text-white' : 'border-line-dark text-paper/80 hover:border-paper hover:text-paper'
                 }`}
@@ -74,18 +78,18 @@ function ContactForm() {
       </fieldset>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2">
-        <Field label="Nome" value={name} onChange={setName} />
-        <Field label="Email" type="email" value={email} onChange={setEmail} />
+        <Field label={contact.name} value={name} onChange={setName} />
+        <Field label={contact.email} type="email" value={email} onChange={setEmail} />
       </div>
       <div className="mt-6">
-        <Field label="Raccontami il progetto" value={message} onChange={setMessage} textarea />
+        <Field label={contact.message} value={message} onChange={setMessage} textarea />
       </div>
 
       <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-[16rem] text-sm leading-snug text-muted-dark">Si aprirà il tuo programma di posta con il messaggio già compilato.</p>
+        <p className="max-w-[16rem] text-sm leading-snug text-muted-dark">{contact.mailNote}</p>
         <Magnetic>
           <Button type="submit" variant="accent">
-            Invia richiesta
+            {contact.submit}
           </Button>
         </Magnetic>
       </div>
@@ -104,6 +108,8 @@ function useClock(timeZone: string) {
 }
 
 export default function Contact() {
+  const t = useT();
+  const { contact } = t;
   const [copied, setCopied] = useState(false);
   const time = useClock(site.timezone);
   const wordmarkRef = useRef<HTMLDivElement>(null);
@@ -129,15 +135,15 @@ export default function Contact() {
     <section id="contatti" className="relative overflow-hidden rounded-t-[2rem] bg-ink text-paper md:rounded-t-[3rem]">
       <div className="container-x pb-16 pt-28 md:pt-40">
         <SectionLabel index="06" dark>
-          Contatti
+          {contact.label}
         </SectionLabel>
 
         <RevealLines
           className="mt-10 text-display-1 font-medium"
           lines={[
-            'Hai un progetto',
+            contact.title[0],
             <>
-              <em className="accent-serif text-accent">in mente?</em>
+              <em className="accent-serif text-accent">{contact.title[1]}</em>
             </>,
           ]}
         />
@@ -149,7 +155,7 @@ export default function Contact() {
             </FadeUp>
 
             <FadeUp delay={0.1} className="mt-12">
-              <p className="eyebrow mb-3 text-muted-dark">Scrivimi direttamente</p>
+              <p className="eyebrow mb-3 text-muted-dark">{contact.direct}</p>
               <div className="flex flex-wrap items-center gap-3">
                 <a
                   href={`mailto:${site.email}`}
@@ -162,7 +168,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={copy}
-                  aria-label="Copia indirizzo email"
+                  aria-label={contact.copyAria}
                   className="relative grid h-10 w-10 place-items-center rounded-full border border-line-dark transition-colors hover:border-paper"
                 >
                   <AnimatePresence mode="wait" initial={false}>
@@ -185,7 +191,7 @@ export default function Contact() {
                         exit={{ opacity: 0, y: 6, x: '-50%' }}
                         transition={{ duration: 0.3, ease }}
                       >
-                        Copiato
+                        {contact.copied}
                       </motion.span>
                     )}
                   </AnimatePresence>
@@ -219,10 +225,10 @@ export default function Contact() {
             </span>
           </p>
           <p className="hidden text-center tabular-nums md:block">
-            {site.location} · {time}
+            {t.location} · {time}
           </p>
           <button type="button" onClick={() => scrollToTarget(0)} className="group justify-self-end text-paper/80 hover:text-paper">
-            <RollText>Torna su ↑</RollText>
+            <RollText>{contact.top}</RollText>
           </button>
         </footer>
       </div>

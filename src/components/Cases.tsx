@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useScroll, useSpring } from 'framer-motion';
-import { cases, type CaseStudy } from '../content';
+import type { CaseStudy } from '../content';
+import { useT } from '../i18n';
 import { scrollToTarget } from '../lib/scroll';
 import { PrototypeEvolution, ProcessEvolution, StageFrame } from './CaseVisuals';
 import GameScene from './GameScene';
@@ -13,6 +14,7 @@ function Step({
   active,
   onActive,
   stepRef,
+  phaseLabel,
 }: {
   step: CaseStudy['steps'][number];
   index: number;
@@ -20,6 +22,7 @@ function Step({
   active: boolean;
   onActive: (i: number) => void;
   stepRef: (el: HTMLLIElement | null) => void;
+  phaseLabel: string;
 }) {
   const ref = useRef<HTMLLIElement | null>(null);
   // la fase diventa attiva quando attraversa la fascia centrale dello schermo
@@ -48,7 +51,7 @@ function Step({
         }`}
       >
         <p className={`text-sm tabular-nums transition-colors duration-500 ${active || last ? 'text-accent' : 'text-muted-dark'}`}>
-          Fase 0{index + 1}
+          {phaseLabel} 0{index + 1}
         </p>
         <h4 className="mt-2 text-[1.7rem] font-medium leading-tight tracking-[-0.03em] md:text-[2.2rem]">
           {last ? <em className="accent-serif">{step.phase}</em> : step.phase}
@@ -70,6 +73,8 @@ function CaseVisual({ study, stage, onSelect }: { study: CaseStudy; stage: numbe
 }
 
 export default function Cases() {
+  const { cases: copy } = useT();
+  const cases = copy.items;
   const [active, setActive] = useState(0);
   const [stage, setStage] = useState(0);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -98,25 +103,24 @@ export default function Cases() {
         <div className="grid gap-10 md:grid-cols-12 md:items-end">
           <div className="min-w-0 md:col-span-6">
             <SectionLabel index="04" dark>
-              Casi studio
+              {copy.label}
             </SectionLabel>
             <RevealLines
               className="mt-10 text-display-2 font-medium"
               lines={[
-                'Come lavora',
+                copy.title[0],
                 <>
-                  <em className="accent-serif">il laboratorio.</em>
+                  <em className="accent-serif">{copy.title[1]}</em>
                 </>,
               ]}
             />
           </div>
           <div className="min-w-0 md:col-span-5 md:col-start-8">
             <FadeUp delay={0.15} className="text-lg leading-relaxed text-paper/65">
-              Tre percorsi tipici: un componente fisico, un software su misura, un videogioco. Cambiano gli strumenti, il metodo resta lo
-              stesso — capire il problema, sperimentare, arrivare a qualcosa che funziona.
+              {copy.intro}
             </FadeUp>
             <FadeUp delay={0.25} className="mt-8">
-              <div role="tablist" aria-label="Casi studio" className="inline-flex max-w-full overflow-x-auto rounded-full border border-line-dark p-1">
+              <div role="tablist" aria-label={copy.label} className="inline-flex max-w-full overflow-x-auto rounded-full border border-line-dark p-1">
                 {cases.map((c, i) => (
                   <button
                     key={c.id}
@@ -135,7 +139,7 @@ export default function Cases() {
                   </button>
                 ))}
               </div>
-              <p className="mt-4 text-sm text-muted-dark">Esempi rappresentativi del metodo di lavoro.</p>
+              <p className="mt-4 text-sm text-muted-dark">{copy.note}</p>
             </FadeUp>
           </div>
         </div>
@@ -158,7 +162,7 @@ export default function Cases() {
 
           <div className="mt-8 md:order-1 md:col-span-5 md:mt-0 md:pt-[22vh]">
             <motion.div key={study.id} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}>
-              <p className="eyebrow text-muted-dark">Caso tipo · {study.tab}</p>
+              <p className="eyebrow text-muted-dark">{copy.tag} · {study.tab}</p>
               <h3 className="mt-4 text-display-3 font-medium">{study.title}</h3>
               <p className="mt-3 max-w-md text-lg leading-relaxed text-paper/65">{study.summary}</p>
             </motion.div>
@@ -175,6 +179,7 @@ export default function Cases() {
                   active={stage === i}
                   onActive={setStage}
                   stepRef={(el) => (stepEls.current[i] = el)}
+                  phaseLabel={copy.phase}
                 />
               ))}
             </ol>

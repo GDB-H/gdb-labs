@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { useT } from '../i18n';
 import { ACCENT, INK, LINE, PAPER, useSvgId } from './ProjectVisuals';
 import { ease } from './ui';
 
@@ -57,6 +58,7 @@ const BRACKET =
 const show = (on: boolean) => ({ opacity: on ? 1 : 0, transition: { duration: 0.6, ease } });
 
 export function PrototypeEvolution({ stage }: { stage: number }) {
+  const v = useT().visuals;
   const layers = useSvgId();
   const grid = useSvgId();
   const printClip = useSvgId();
@@ -102,7 +104,7 @@ export function PrototypeEvolution({ stage }: { stage: number }) {
             transition={{ duration: 1.6, ease: 'easeInOut' }}
           />
           <text x="178" y="95" fontSize="15" fill={INK} fontStyle="italic" fontFamily="Instrument Serif, Georgia, serif">
-            supporto più robusto?
+            {v.sketchNote}
           </text>
         </motion.g>
 
@@ -135,7 +137,7 @@ export function PrototypeEvolution({ stage }: { stage: number }) {
             134
           </text>
           <text x="214" y="128" fontSize="10" fill={ACCENT} stroke="none" fontFamily="Inter Tight, sans-serif">
-            rinforzo
+            {v.reinforce}
           </text>
         </motion.g>
 
@@ -205,6 +207,7 @@ function DocFace({ kind }: { kind: Doc }) {
 }
 
 export function ProcessEvolution({ stage, image }: { stage: number; image?: { src: string; alt: string } }) {
+  const v = useT().visuals;
   const arrow = useSvgId();
 
   return (
@@ -236,7 +239,7 @@ export function ProcessEvolution({ stage, image }: { stage: number; image?: { sr
           <motion.g initial={false} animate={show(stage === 3)}>
             <rect x="34" y="72" width="332" height="100" rx="14" fill="none" stroke={ACCENT} strokeWidth="1.4" strokeDasharray="6 5" />
             <text x="200" y="64" textAnchor="middle" fontSize="11" fill={ACCENT} fontFamily="Inter Tight, sans-serif" fontWeight="600">
-              UN SOLO STRUMENTO
+              {v.oneTool}
             </text>
             <g stroke={INK} strokeWidth="1.4">
               {LEAN_X.slice(0, -1).map((x, i) => (
@@ -272,7 +275,7 @@ export function ProcessEvolution({ stage, image }: { stage: number; image?: { sr
                   initial={false}
                   animate={{ opacity: stage >= 2 ? 0.75 : 0 }}
                 >
-                  {d.label}
+                  {v.docs[i] ?? d.label}
                 </motion.text>
                 {stage === 1 && i % 2 === 0 && (
                   <g>
@@ -300,7 +303,7 @@ export function ProcessEvolution({ stage, image }: { stage: number; image?: { sr
             initial={false}
             animate={show(stage === 1)}
           >
-            STESSI DATI, INSERITI TRE VOLTE
+            {v.duplicated}
           </motion.text>
         </svg>
       </div>

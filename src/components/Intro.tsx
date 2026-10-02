@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useT } from '../i18n';
 import { LogoMark, ease } from './ui';
 
 export const INTRO_DURATION = 1.9;
 
 /** Breve apertura con il marchio animato, una sola volta per sessione. */
 export default function Intro({ onDone }: { onDone: () => void }) {
+  const t = useT();
   useEffect(() => {
     const id = window.setTimeout(onDone, INTRO_DURATION * 1000);
     return () => window.clearTimeout(id);
@@ -30,7 +32,7 @@ export default function Intro({ onDone }: { onDone: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease, delay: 0.5 }}
         >
-          GDB Labs — Laboratorio
+          {t.intro}
         </motion.p>
       </div>
     </motion.div>

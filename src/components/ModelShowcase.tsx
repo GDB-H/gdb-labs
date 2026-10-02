@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
-import { showcase } from '../content';
+import { useT } from '../i18n';
 import { prefersReducedMotion } from '../lib/scroll';
 import type { Showcase, ShowcaseKind } from '../three/showcase';
 import { SectionLabel, ease } from './ui';
@@ -12,6 +12,7 @@ const KINDS: ShowcaseKind[] = ['proto', 'game'];
  * three.js viene caricato solo quando la sezione si avvicina allo schermo.
  */
 export default function ModelShowcase() {
+  const { showcase } = useT();
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const api = useRef<Showcase | null>(null);
@@ -97,28 +98,28 @@ export default function ModelShowcase() {
           initial={{ opacity: 0 }}
           animate={{ opacity: ready ? 1 : 0 }}
           transition={{ duration: 1 }}
-          aria-label={`Modello 3D: ${object.name}, fase ${showcase.phases[phase]}`}
+          aria-label={`${showcase.model}: ${object.name}, ${showcase.phaseWord} ${showcase.phases[phase]}`}
           role="img"
         />
         {failed && (
-          <p className="absolute inset-0 grid place-items-center text-sm text-muted">Il modello 3D non è disponibile su questo dispositivo.</p>
+          <p className="absolute inset-0 grid place-items-center text-sm text-muted">{showcase.failed}</p>
         )}
 
         <div className="container-x pointer-events-none relative flex h-full flex-col justify-between pb-6 pt-24 md:pb-10 md:pt-28">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <SectionLabel index="03" dark={dark}>
-                Modellazione 3D
+                {showcase.label}
               </SectionLabel>
               <h2 className="mt-5 text-[clamp(2rem,4.2vw,4rem)] font-medium leading-[0.98] tracking-[-0.04em]">
-                Dal concept
+                {showcase.title[0]}
                 <br />
-                <em className="accent-serif">al modello definitivo.</em>
+                <em className="accent-serif">{showcase.title[1]}</em>
               </h2>
             </div>
             <div
               role="tablist"
-              aria-label="Oggetto"
+              aria-label={showcase.objectLabel}
               className={`pointer-events-auto inline-flex self-start rounded-full border p-1 backdrop-blur ${dark ? 'border-line-dark bg-ink/40' : 'border-line bg-paper/60'}`}
             >
               {KINDS.map((k) => (

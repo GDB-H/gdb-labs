@@ -1,13 +1,49 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
-import { navLinks, site } from '../content';
+import { LOCALES, site } from '../content';
+import { useI18n } from '../i18n';
 import { useActiveSection } from '../lib/hooks';
 import { lockScroll, scrollToTarget } from '../lib/scroll';
 import { Button, LogoMark, Magnetic, ease } from './ui';
 
-const sectionIds = ['top', ...navLinks.map((l) => l.id), 'contatti'];
+const sectionIds = ['top', 'laboratorio', 'competenze', 'casi', 'chi-sono', 'contatti'];
+
+/** Selettore lingua: il cambio avvia la trasmutazione dal punto del click. */
+function LanguageSwitch({ dark }: { dark: boolean }) {
+  const { locale, switchLocale, t } = useI18n();
+  return (
+    <div
+      role="group"
+      aria-label={t.nav.language}
+      data-no-transmute
+      className={`flex rounded-full border p-0.5 text-[0.75rem] font-semibold ${dark ? 'border-line-dark' : 'border-line bg-paper/60'}`}
+    >
+      {LOCALES.map((l) => (
+        <button
+          key={l}
+          type="button"
+          aria-pressed={locale === l}
+          onClick={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            switchLocale(l, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+          }}
+          className="relative rounded-full px-2.5 py-1.5 uppercase tracking-[0.08em]"
+        >
+          {locale === l && (
+            <motion.span layoutId="lang-pill" className={`absolute inset-0 rounded-full ${dark ? 'bg-paper' : 'bg-ink'}`} transition={{ duration: 0.5, ease }} />
+          )}
+          <span className={`relative transition-colors ${locale === l ? (dark ? 'text-ink' : 'text-paper') : dark ? 'text-paper/60 hover:text-paper' : 'text-muted hover:text-ink'}`}>
+            {l}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function Nav() {
+  const { t } = useI18n();
+  const navLinks = t.nav.links;
   const { scrollY, scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.3 });
   const [hidden, setHidden] = useState(false);
@@ -60,7 +96,7 @@ export default function Nav() {
             onMouseLeave={() => setLogoHover(false)}
           >
             <LogoMark className="h-8 w-8" inverted={menuOpen} speed={logoHover ? 4 : 1} />
-            <span className="text-[0.98rem] font-semibold tracking-tight">{site.brand}</span>
+            <span className="whitespace-nowrap text-[0.98rem] font-semibold tracking-tight">{site.brand}</span>
           </a>
 
           <ul className="hidden items-center gap-1 md:flex">
@@ -72,7 +108,7 @@ export default function Nav() {
                     e.preventDefault();
                     goTo(link.id);
                   }}
-                  className={`relative isolate rounded-full px-4 py-2 text-[0.92rem] transition-colors ${active === link.id ? 'text-ink' : 'text-muted hover:text-ink'}`}
+                  className={`relative isolate whitespace-nowrap rounded-full px-4 py-2 text-[0.92rem] transition-colors ${active === link.id ? 'text-ink' : 'text-muted hover:text-ink'}`}
                 >
                   {active === link.id && (
                     <motion.span layoutId="nav-active" className="absolute inset-0 -z-10 rounded-full bg-paper-2" transition={{ duration: 0.5, ease }} />
@@ -84,6 +120,7 @@ export default function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitch dark={menuOpen} />
             <Magnetic className="hidden md:inline-block">
               <Button
                 href="#contatti"
@@ -91,14 +128,14 @@ export default function Nav() {
                 variant="ink"
                 className="!py-2.5 !text-[0.9rem]"
               >
-                Parliamo
+                {t.nav.cta}
               </Button>
             </Magnetic>
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
               aria-expanded={menuOpen}
-              aria-label={menuOpen ? 'Chiudi menu' : 'Apri menu'}
+              aria-label={menuOpen ? t.nav.closeMenu : t.nav.openMenu}
               className={`relative grid h-11 w-11 place-items-center rounded-full md:hidden ${menuOpen ? 'bg-paper text-ink' : 'bg-ink text-paper'}`}
             >
               <span className={`absolute h-[1.5px] w-4 bg-current transition-transform duration-500 ease-out-expo ${menuOpen ? 'rotate-45' : '-translate-y-[3px]'}`} />
@@ -118,7 +155,7 @@ export default function Nav() {
             transition={{ duration: 0.7, ease }}
           >
             <ul className="space-y-1">
-              {[...navLinks, { id: 'contatti', label: 'Contatti' }].map((link, i) => (
+              {[...navLinks, { id: 'contatti', label: t.nav.contact }].map((link, i) => (
                 <li key={link.id} className="overflow-hidden">
                   <motion.a
                     href={`#${link.id}`}
@@ -143,7 +180,7 @@ export default function Nav() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <p className="eyebrow">Scrivimi</p>
+              <p className="eyebrow">{t.nav.writeMe}</p>
               <a href={`mailto:${site.email}`} className="text-lg text-paper underline decoration-line-dark underline-offset-4">
                 {site.email}
               </a>
