@@ -7,5 +7,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 8000, // We map this to 8003 in docker-compose
+    // indirizzi pubblici dei tunnel Cloudflare (link temporanei e dominio)
+    allowedHosts: ['.trycloudflare.com', '.gdb-labs.com'],
   }
 })
