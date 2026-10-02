@@ -15,7 +15,7 @@
   body {
     @apply bg-paper text-ink font-sans;
     margin: 0;
-    transition: text-shadow 0.45s ease;
+    transition: text-shadow 0.7s ease;
     font-feature-settings: 'ss01', 'cv11';
   }
 

@@ -12,14 +12,14 @@
 // con un ingombro vicino a quello delle lettere, così il testo non "salta"
 const GLYPHS = Array.from('☉☽☿♃♄△▽∴ψξλφθΔΩ');
 
-const WAVE = 520; // tempo che il fronte impiega ad attraversare lo schermo (ms)
-const LINE_MIN = 140; // anche le parole brevi vengono attraversate, non cambiano tutte insieme
-const LINE_MAX = 460; // tempo massimo per attraversare un singolo testo (ms)
-const PER_CHAR = 12; // ms per carattere, entro LINE_MIN..LINE_MAX
+const WAVE = 860; // tempo che il fronte impiega ad attraversare lo schermo (ms)
+const LINE_MIN = 230; // anche le parole brevi vengono attraversate, non cambiano tutte insieme
+const LINE_MAX = 720; // tempo massimo per attraversare un singolo testo (ms)
+const PER_CHAR = 18; // ms per carattere, entro LINE_MIN..LINE_MAX
 const BAND = 7; // larghezza del fronte, in caratteri
-const GLYPH_LIFE = [20, 140]; // quanto resta simbolo ogni carattere (ms), min..max
-const FLICKER = 60; // ogni quanto cambia il simbolo (ms)
-const SAFETY = 2600; // in ogni caso, dopo questo tempo si chiude
+const GLYPH_LIFE = [34, 210]; // quanto resta simbolo ogni carattere (ms), min..max
+const FLICKER = 80; // ogni quanto cambia il simbolo (ms)
+const SAFETY = 4200; // in ogni caso, dopo questo tempo si chiude
 
 type Point = { x: number; y: number };
 type Entry = {

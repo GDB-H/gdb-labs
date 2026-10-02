@@ -40,7 +40,7 @@ export type CaseStudy = {
   title: string;
   summary: string;
   // visual animato che cambia a ogni fase (una etichetta breve per fase)
-  visual: 'prototype' | 'process' | 'game';
+  visual: 'consult' | 'process' | 'game';
   steps: { phase: string; short: string; text: string }[];
   image?: { src: string; alt: string };
 };
@@ -230,39 +230,43 @@ const it = {
     label: 'Casi studio',
     title: ['Come lavora', 'il laboratorio.'],
     intro:
-      'Tre percorsi tipici: un componente fisico, un software su misura, un videogioco. Cambiano gli strumenti, il metodo resta lo stesso — capire il problema, sperimentare, arrivare a qualcosa che funziona.',
+      'Tre percorsi tipici: una consulenza che diventa software, un gestionale su misura, un videogioco. Cambiano gli strumenti, il metodo resta lo stesso — capire il problema, sperimentare, arrivare a qualcosa che funziona.',
     note: 'Esempi rappresentativi del metodo di lavoro.',
     tag: 'Caso tipo',
     phase: 'Fase',
     // Casi tipo: esempi rappresentativi del metodo. Sostituibili con casi reali.
     items: [
       {
-        id: 'prototipazione',
-        tab: 'Prototipazione',
-        title: 'Il ricambio che non esisteva',
-        summary: 'Un componente meccanico progettato da zero, provato sul campo e messo in produzione.',
-        visual: 'prototype',
+        id: 'consulenza',
+        tab: 'Consulenza & software',
+        title: 'Dalla norma al software',
+        summary: 'Una competenza tecnica trasformata in uno strumento che chiunque in azienda può usare. Il risultato finale è qui accanto: provalo.',
+        visual: 'consult',
         steps: [
-          { phase: 'Cliente', short: 'Brief', text: 'Un’azienda manifatturiera con un problema concreto su una linea di produzione.' },
           {
-            phase: 'Problema',
-            short: 'Guasto',
-            text: 'Un supporto si rompe di continuo e a catalogo non esiste un ricambio adatto: ogni guasto significa una macchina ferma e ore di lavoro perse.',
+            phase: 'Cliente',
+            short: 'Brief',
+            text: 'Un’azienda che lavora in aree con atmosfere potenzialmente esplosive deve verificare, per ogni installazione, quali apparecchiature sono ammesse. Oggi lo fa consultando norme e tabelle.',
           },
           {
-            phase: 'Ricerca e sviluppo',
-            short: 'CAD',
-            text: 'Rilievo delle misure, analisi delle cause della rottura e dei carichi in gioco, scelta del materiale e studio di una geometria più robusta dell’originale.',
+            phase: 'Consulenza',
+            short: 'Norme',
+            text: 'Studio le direttive ATEX e il modo in cui l’azienda lavora davvero, insieme a chi è sul campo. Le regole sparse tra i documenti diventano poche regole chiare, senza ambiguità.',
           },
           {
-            phase: 'Prototipazione',
-            short: 'Stampa',
-            text: 'Modello CAD e prototipi stampati in 3D, montati e provati direttamente sulla macchina. Ogni prova suggerisce una modifica, fino al pezzo che regge davvero.',
+            phase: 'Architettura',
+            short: 'Modello',
+            text: 'Le regole diventano dati: un modello semplice, leggibile anche da chi non programma, che descrive zone e categorie ammesse.',
           },
           {
-            phase: 'Prodotto finale',
-            short: 'Prodotto',
-            text: 'Il componente definitivo nel materiale adatto, più resistente dell’originale, con il file CAD e le indicazioni per riprodurlo quando serve.',
+            phase: 'Sviluppo',
+            short: 'Codice',
+            text: 'Ogni regola ha la sua funzione, e ogni funzione i suoi test. Il codice è piccolo, verificabile e facile da aggiornare quando cambia la norma.',
+          },
+          {
+            phase: 'Software',
+            short: 'App',
+            text: 'Uno strumento immediato: scegli la zona, scegli l’apparecchio e la risposta arriva subito, con il motivo. Provalo qui accanto.',
           },
         ],
       },
@@ -336,8 +340,30 @@ const it = {
 
   // testi dentro le illustrazioni animate
   visuals: {
-    sketchNote: 'supporto più robusto?',
-    reinforce: 'rinforzo',
+    consult: {
+      docs: ['Direttiva 2014/34/UE', 'Direttiva 1999/92/CE', 'Tabella zone'],
+      rules: [
+        ['Zona 0 · 20', 'Cat. 1'],
+        ['Zona 1 · 21', 'Cat. 1–2'],
+        ['Zona 2 · 22', 'Cat. 1–3'],
+      ],
+      legend: 'G = gas · D = polveri',
+      modelComment: '// regole estratte dalle direttive ATEX',
+      fnComment: '// una regola, una funzione: testabile',
+      tests: '4 test superati',
+      appTitle: 'Verifica ATEX',
+      zone: 'Zona',
+      device: 'Apparecchio',
+      ok: 'Idoneo',
+      ko: 'Non idoneo',
+      gas: 'gas',
+      dust: 'polveri',
+      or: 'o',
+      reasonOk: (device: string, zone: number) => `La categoria ${device} è ammessa in zona ${zone}.`,
+      reasonCat: (zone: number, allowed: string) => `In zona ${zone} servono apparecchi di categoria ${allowed}.`,
+      reasonAtm: (deviceAtm: string, zone: number, zoneAtm: string) => `Apparecchio per ${deviceAtm}, ma la zona ${zone} è per ${zoneAtm}.`,
+      disclaimer: 'Demo semplificata: non sostituisce la valutazione del rischio.',
+    },
     docs: ['Ordine', 'Email', 'Produzione', 'Magazzino', 'Ricopia', 'Consegna'],
     oneTool: 'UN SOLO STRUMENTO',
     duplicated: 'STESSI DATI, INSERITI TRE VOLTE',
@@ -574,38 +600,42 @@ const en: Content = {
     label: 'Case studies',
     title: ['How the lab', 'works.'],
     intro:
-      'Three typical journeys: a physical part, custom software and a video game. The tools change, the method stays the same — understand the problem, experiment, get to something that works.',
+      'Three typical journeys: consulting that becomes software, custom management software and a video game. The tools change, the method stays the same — understand the problem, experiment, get to something that works.',
     note: 'Representative examples of how I work.',
     tag: 'Sample case',
     phase: 'Phase',
     items: [
       {
-        id: 'prototipazione',
-        tab: 'Prototyping',
-        title: 'The spare part that didn’t exist',
-        summary: 'A mechanical component designed from scratch, tested in the field and put into production.',
-        visual: 'prototype',
+        id: 'consulenza',
+        tab: 'Consulting & software',
+        title: 'From regulation to software',
+        summary: 'Technical expertise turned into a tool anyone in the company can use. The finished tool is right here: try it.',
+        visual: 'consult',
         steps: [
-          { phase: 'Client', short: 'Brief', text: 'A manufacturing company with a concrete problem on a production line.' },
           {
-            phase: 'Problem',
-            short: 'Failure',
-            text: 'A support bracket keeps breaking and no suitable spare exists in any catalogue: every failure means a stopped machine and hours of lost work.',
+            phase: 'Client',
+            short: 'Brief',
+            text: 'A company working in areas with potentially explosive atmospheres has to check, for every installation, which equipment is allowed. Today it does so by digging through regulations and tables.',
           },
           {
-            phase: 'Research & development',
-            short: 'CAD',
-            text: 'Measuring the part, analysing why it fails and the loads involved, choosing the material and designing a sturdier geometry than the original.',
+            phase: 'Consulting',
+            short: 'Rules',
+            text: 'I study the ATEX directives and the way the company really works, together with the people in the field. Rules scattered across documents become a few clear, unambiguous ones.',
           },
           {
-            phase: 'Prototyping',
-            short: 'Print',
-            text: 'CAD model and 3D-printed prototypes, fitted and tested directly on the machine. Every test suggests a change, until the part truly holds.',
+            phase: 'Architecture',
+            short: 'Model',
+            text: 'The rules become data: a simple model, readable even by non-programmers, describing zones and permitted equipment categories.',
           },
           {
-            phase: 'Final product',
-            short: 'Product',
-            text: 'The final component in the right material, stronger than the original, delivered with the CAD file and instructions to reproduce it whenever needed.',
+            phase: 'Development',
+            short: 'Code',
+            text: 'Each rule gets its own function, and each function its own tests. The code is small, verifiable and easy to update when the regulation changes.',
+          },
+          {
+            phase: 'Software',
+            short: 'App',
+            text: 'An instant tool: pick the zone, pick the equipment, and the answer comes right away — with the reason why. Try it right here.',
           },
         ],
       },
@@ -678,8 +708,30 @@ const en: Content = {
   },
 
   visuals: {
-    sketchNote: 'sturdier bracket?',
-    reinforce: 'reinforcement',
+    consult: {
+      docs: ['Directive 2014/34/EU', 'Directive 1999/92/EC', 'Zone table'],
+      rules: [
+        ['Zone 0 · 20', 'Cat. 1'],
+        ['Zone 1 · 21', 'Cat. 1–2'],
+        ['Zone 2 · 22', 'Cat. 1–3'],
+      ],
+      legend: 'G = gas · D = dust',
+      modelComment: '// rules extracted from the ATEX directives',
+      fnComment: '// one rule, one function: testable',
+      tests: '4 tests passed',
+      appTitle: 'ATEX check',
+      zone: 'Zone',
+      device: 'Equipment',
+      ok: 'Suitable',
+      ko: 'Not suitable',
+      gas: 'gas',
+      dust: 'dust',
+      or: 'or',
+      reasonOk: (device: string, zone: number) => `Category ${device} is allowed in zone ${zone}.`,
+      reasonCat: (zone: number, allowed: string) => `Zone ${zone} requires category ${allowed} equipment.`,
+      reasonAtm: (deviceAtm: string, zone: number, zoneAtm: string) => `Equipment rated for ${deviceAtm}, but zone ${zone} is a ${zoneAtm} zone.`,
+      disclaimer: 'Simplified demo — not a substitute for a risk assessment.',
+    },
     docs: ['Order', 'Email', 'Production', 'Warehouse', 'Re-entry', 'Delivery'],
     oneTool: 'ONE SINGLE TOOL',
     duplicated: 'SAME DATA, ENTERED THREE TIMES',

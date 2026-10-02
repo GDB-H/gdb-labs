@@ -41,7 +41,7 @@ const SIGIL = [
 function Sigil({ x, y }: { x: number; y: number }) {
   const reach = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y)) * 2;
   return (
-    <motion.div className="pointer-events-none fixed inset-0 z-[95]" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
+    <motion.div className="pointer-events-none fixed inset-0 z-[95]" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>
       {[0, 0.14].map((delay, i) => (
         <motion.span
           key={delay}
@@ -55,7 +55,7 @@ function Sigil({ x, y }: { x: number; y: number }) {
           }}
           initial={{ scale: 0, opacity: i === 0 ? 0.7 : 0.35 }}
           animate={{ scale: 1, opacity: 0 }}
-          transition={{ duration: 1.05, delay, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.7, delay: delay * 1.5, ease: [0.22, 1, 0.36, 1] }}
         />
       ))}
       <motion.svg
@@ -64,7 +64,7 @@ function Sigil({ x, y }: { x: number; y: number }) {
         style={{ left: x - 48, top: y - 48 }}
         initial={{ rotate: -30, scale: 0.6, opacity: 0 }}
         animate={{ rotate: 60, scale: [0.6, 1, 1.6], opacity: [0, 1, 0] }}
-        transition={{ duration: 1.25, times: [0, 0.35, 1], ease: 'easeOut' }}
+        transition={{ duration: 2, times: [0, 0.32, 1], ease: 'easeOut' }}
       >
         {SIGIL.map((d, i) => (
           <motion.path
@@ -76,7 +76,7 @@ function Sigil({ x, y }: { x: number; y: number }) {
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 0.45, delay: i * 0.07, ease: 'easeInOut' }}
+            transition={{ duration: 0.7, delay: i * 0.11, ease: 'easeInOut' }}
           />
         ))}
         <circle r="2.4" fill="#EE5420" cy="11.9" />

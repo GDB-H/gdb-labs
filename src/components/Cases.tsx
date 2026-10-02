@@ -3,7 +3,8 @@ import { motion, useInView, useScroll, useSpring } from 'framer-motion';
 import type { CaseStudy } from '../content';
 import { useT } from '../i18n';
 import { scrollToTarget } from '../lib/scroll';
-import { PrototypeEvolution, ProcessEvolution, StageFrame } from './CaseVisuals';
+import { ProcessEvolution, StageFrame } from './CaseVisuals';
+import { ConsultEvolution } from './ConsultVisual';
 import GameScene from './GameScene';
 import { FadeUp, RevealLines, SectionLabel, ease } from './ui';
 
@@ -66,7 +67,7 @@ function CaseVisual({ study, stage, onSelect }: { study: CaseStudy; stage: numbe
   return (
     <StageFrame id={study.id} labels={study.steps.map((s) => s.short)} stage={stage} onSelect={onSelect}>
       {study.visual === 'game' && <GameScene stage={stage} />}
-      {study.visual === 'prototype' && <PrototypeEvolution stage={stage} />}
+      {study.visual === 'consult' && <ConsultEvolution stage={stage} />}
       {study.visual === 'process' && <ProcessEvolution stage={stage} image={study.image} />}
     </StageFrame>
   );
