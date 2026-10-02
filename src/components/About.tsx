@@ -34,7 +34,7 @@ export default function About() {
     <section id="chi-sono" className="container-x py-28 md:py-40">
       <div className="grid gap-10 md:grid-cols-12">
         <div className="md:col-span-3">
-          <SectionLabel index="04">Chi sono</SectionLabel>
+          <SectionLabel index="05">Chi sono</SectionLabel>
         </div>
         <div className="md:col-span-9">
           <ScrollStatement text={about.statement} />

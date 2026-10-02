@@ -1,5 +1,5 @@
-import { useRef, type ReactNode, type ElementType } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { useId, useRef, type ReactNode, type ElementType } from 'react';
+import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
 export const ease = [0.16, 1, 0.3, 1] as const;
@@ -168,14 +168,89 @@ export function Button({
 }
 
 // ----------------------------------------------------------------
-// Marchio
+// Marchio: una sfera arancione orbita attorno alla G su un'ellisse
+// inclinata, passando davanti e dietro la lettera
 // ----------------------------------------------------------------
-export function LogoMark({ className = 'h-8 w-8', inverted = false }: { className?: string; inverted?: boolean }) {
+const G_PATH = 'M21.66 10.34 A8 8 0 1 0 24 16 H17';
+
+export function LogoMark({
+  className = 'h-8 w-8',
+  inverted = false,
+  bare = false,
+  speed = 1,
+  draw = false,
+}: {
+  className?: string;
+  inverted?: boolean;
+  /** senza il quadrato di fondo (per fondi scuri) */
+  bare?: boolean;
+  speed?: number;
+  /** la G si disegna all'ingresso */
+  draw?: boolean;
+}) {
+  const id = useId().replace(/:/g, '');
+  const reduce = useReducedMotion();
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
+  const t = useRef(0);
+  const cx = useMotionValue(24.5);
+  const cy = useMotionValue(8);
+  const r = useMotionValue(2.3);
+  const front = useMotionValue(1);
+  const back = useMotionValue(0);
+
+  useAnimationFrame((_, delta) => {
+    if (reduce) return;
+    t.current += (delta / 1000) * speedRef.current;
+    const a = t.current * 1.4 - 0.9;
+    const ex = Math.cos(a) * 12;
+    const ey = Math.sin(a) * 4.4;
+    const tilt = -0.62;
+    cx.set(16 + ex * Math.cos(tilt) - ey * Math.sin(tilt));
+    cy.set(16 + ex * Math.sin(tilt) + ey * Math.cos(tilt));
+    const depth = Math.sin(a);
+    r.set(2.3 + depth * 0.55);
+    front.set(depth >= 0 ? 1 : 0);
+    back.set(depth < 0 ? 0.75 : 0);
+  });
+
+  const ink = '#121214';
+  const paper = '#F3F1EC';
+  const letter = bare ? (inverted ? ink : paper) : inverted ? ink : paper;
+
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill={inverted ? '#F3F1EC' : '#121214'} />
-      <path d="M21.66 10.34 A8 8 0 1 0 24 16 H17" fill="none" stroke={inverted ? '#121214' : '#F3F1EC'} strokeWidth="3" strokeLinecap="round" />
-      <circle cx="24.5" cy="8" r="2.2" fill="#EE5420" />
+    <svg viewBox="0 0 32 32" className={`overflow-visible ${className}`} aria-hidden>
+      <defs>
+        <radialGradient id={`${id}-sphere`} cx="35%" cy="30%" r="75%">
+          <stop offset="0" stopColor="#FFB792" />
+          <stop offset="0.5" stopColor="#EE5420" />
+          <stop offset="1" stopColor="#A9360D" />
+        </radialGradient>
+      </defs>
+      {!bare && <rect width="32" height="32" rx="8" fill={inverted ? paper : ink} />}
+      <ellipse
+        cx="16"
+        cy="16"
+        rx="12"
+        ry="4.4"
+        transform="rotate(-35.5 16 16)"
+        fill="none"
+        stroke={letter}
+        strokeOpacity="0.16"
+        strokeWidth="0.5"
+      />
+      <motion.circle cx={cx} cy={cy} r={r} fill={`url(#${id}-sphere)`} style={{ opacity: back }} />
+      <motion.path
+        d={G_PATH}
+        fill="none"
+        stroke={letter}
+        strokeWidth="3"
+        strokeLinecap="round"
+        initial={draw ? { pathLength: 0 } : false}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.1, ease: [0.65, 0, 0.35, 1] }}
+      />
+      <motion.circle cx={cx} cy={cy} r={r} fill={`url(#${id}-sphere)`} style={{ opacity: front }} />
     </svg>
   );
 }

@@ -100,14 +100,20 @@ export const lab = {
   hero: {
     image: unsplash('photo-1581092160562-40aa08e78837', 2400),
     alt: 'Progettista al banco di lavoro con disegni tecnici, attrezzi e componenti',
-    caption: 'Banco 01 — Progettazione: ogni progetto parte da qui.',
+    caption: 'Il banco di progettazione: ogni progetto parte da qui.',
   },
   intro:
     'GDB Labs è un laboratorio nel senso più concreto: un posto dove si prova, si misura e si costruisce. Software, processi e oggetti fisici stanno sullo stesso banco di lavoro — ed è proprio questo misto a generare soluzioni più semplici e più solide.',
   benches: [
-    { label: 'Banco 02', title: 'Gestionali', caption: 'Processi aziendali tradotti in software.', visual: 'dashboard' },
-    { label: 'Banco 03', title: 'Web app', caption: 'Strumenti web veloci, costruiti su misura.', visual: 'web' },
-    { label: 'Banco 04', title: 'Stampa 3D', caption: 'Prototipi da provare sul campo.', visual: 'print' },
+    {
+      label: 'Banco 01',
+      title: 'Gestionali',
+      caption: 'Magazzino, ordini, produzione: processi reali tradotti in software.',
+      image: unsplash('photo-1553413077-190dd305871c'),
+      imageAlt: 'Corridoio di un grande magazzino con scaffalature piene di scatole',
+    },
+    { label: 'Banco 02', title: 'Web app', caption: 'Strumenti web veloci, costruiti su misura.', visual: 'web' },
+    { label: 'Banco 03', title: 'Stampa 3D', caption: 'Prototipi da provare sul campo.', visual: 'print' },
     {
       label: 'Il laboratorio',
       title: 'Il misto è il metodo',
@@ -115,7 +121,7 @@ export const lab = {
       image: unsplash('photo-1550745165-9bc0b252726f'),
       imageAlt: 'Computer, console e cartucce retrò illuminati da luci al neon',
     },
-    { label: 'Banco 05', title: 'Videogiochi', caption: 'Sistemi interattivi in tempo reale.', visual: 'game' },
+    { label: 'Banco 04', title: 'Videogiochi', caption: 'Sistemi interattivi in tempo reale.', visual: 'game' },
   ] as Bench[],
   verbs: [
     { title: 'Sperimentare', text: 'Ogni idea si verifica con un prototipo, prima di investirci tempo e denaro.' },
@@ -233,6 +239,34 @@ export const cases: CaseStudy[] = [
     ],
   },
 ];
+
+export const showcase = {
+  phases: ['Concept', 'Wireframe', 'Low poly', 'Mesh', 'Definitivo'],
+  objects: {
+    proto: {
+      tab: 'Prototipazione',
+      name: 'Staffa di supporto',
+      notes: [
+        'Schizzi e misure: la forma nasce dai vincoli reali del pezzo da sostituire.',
+        'La struttura del modello CAD, quota dopo quota.',
+        'Una geometria essenziale per verificare ingombri e montaggio.',
+        'Superfici, raccordi e fori definiti: il pezzo è pronto per la stampa.',
+        'Stampato, provato e montato. Il ricambio che non esisteva.',
+      ],
+    },
+    game: {
+      tab: 'Videogiochi',
+      name: 'Lanterna — asset di gioco',
+      notes: [
+        'Dalla prima idea: una lanterna che porta luce nel buio.',
+        'La struttura del modello, pensata per restare leggera in tempo reale.',
+        'Forme essenziali, subito provate dentro il gioco.',
+        'Proporzioni, dettagli e una topologia pulita.',
+        'Materiali, luce e atmosfera: l’oggetto vive nel mondo di gioco.',
+      ],
+    },
+  },
+};
 
 export const about = {
   statement:

@@ -13,6 +13,7 @@ export default function Nav() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoHover, setLogoHover] = useState(false);
   const active = useActiveSection(sectionIds);
 
   useMotionValueEvent(scrollY, 'change', (v) => {
@@ -55,8 +56,10 @@ export default function Nav() {
               goTo('top');
             }}
             className={`flex items-center gap-2.5 rounded-full pr-2 transition-colors ${menuOpen ? 'text-paper' : 'text-ink'}`}
+            onMouseEnter={() => setLogoHover(true)}
+            onMouseLeave={() => setLogoHover(false)}
           >
-            <LogoMark className="h-8 w-8" inverted={menuOpen} />
+            <LogoMark className="h-8 w-8" inverted={menuOpen} speed={logoHover ? 4 : 1} />
             <span className="text-[0.98rem] font-semibold tracking-tight">{site.brand}</span>
           </a>
 

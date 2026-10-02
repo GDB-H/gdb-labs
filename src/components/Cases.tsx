@@ -97,7 +97,7 @@ export default function Cases() {
       <div className="container-x py-28 md:py-40">
         <div className="grid gap-10 md:grid-cols-12 md:items-end">
           <div className="min-w-0 md:col-span-6">
-            <SectionLabel index="03" dark>
+            <SectionLabel index="04" dark>
               Casi studio
             </SectionLabel>
             <RevealLines

@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Check, Copy } from 'lucide-react';
 import { contact, site } from '../content';
 import { scrollToTarget } from '../lib/scroll';
-import { Button, FadeUp, Magnetic, RevealLines, RollText, SectionLabel, ease } from './ui';
+import { Button, FadeUp, LogoMark, Magnetic, RevealLines, RollText, SectionLabel, ease } from './ui';
 
 function Field({
   label,
@@ -128,7 +128,7 @@ export default function Contact() {
   return (
     <section id="contatti" className="relative overflow-hidden rounded-t-[2rem] bg-ink text-paper md:rounded-t-[3rem]">
       <div className="container-x pb-16 pt-28 md:pt-40">
-        <SectionLabel index="05" dark>
+        <SectionLabel index="06" dark>
           Contatti
         </SectionLabel>
 
@@ -212,8 +212,11 @@ export default function Contact() {
         </div>
 
         <footer className="mt-28 grid grid-cols-2 items-center gap-y-4 border-t border-line-dark pt-6 text-sm text-muted-dark md:mt-40 md:grid-cols-3">
-          <p>
-            © {new Date().getFullYear()} {site.name} — {site.brand}
+          <p className="flex items-center gap-3">
+            <LogoMark bare className="h-7 w-7" />
+            <span>
+              © {new Date().getFullYear()} {site.name} — {site.brand}
+            </span>
           </p>
           <p className="hidden text-center tabular-nums md:block">
             {site.location} · {time}

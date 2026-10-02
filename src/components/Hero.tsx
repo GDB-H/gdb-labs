@@ -52,7 +52,8 @@ function RotatingBadge() {
   );
 }
 
-export default function Hero() {
+export default function Hero({ startDelay = 0 }: { startDelay?: number }) {
+  const d = startDelay;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
@@ -66,7 +67,7 @@ export default function Hero() {
         style={{ scale: fieldScale }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.6, delay: 0.3 }}
+        transition={{ duration: 1.6, delay: d + 0.3 }}
       >
         <DotField />
       </motion.div>
@@ -79,7 +80,7 @@ export default function Hero() {
           className="eyebrow mb-6 flex items-center gap-3 text-muted md:mb-10"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease, delay: 0.1 }}
+          transition={{ duration: 0.8, ease, delay: d + 0.1 }}
         >
           <span className="h-px w-8 bg-accent" />
           {hero.eyebrow}
@@ -89,7 +90,7 @@ export default function Hero() {
           <RevealLines
             as="h1"
             immediate
-            delay={0.15}
+            delay={d + 0.15}
             className="text-display-1 font-medium"
             lines={[
               'Dal problema',
@@ -102,7 +103,7 @@ export default function Hero() {
             className="mb-[1vw] hidden lg:block"
             initial={{ opacity: 0, scale: 0.6, rotate: -40 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.4, ease, delay: 0.8 }}
+            transition={{ duration: 1.4, ease, delay: d + 0.8 }}
           >
             <Magnetic strength={0.2}>
               <RotatingBadge />
@@ -115,7 +116,7 @@ export default function Hero() {
             className="max-w-xl text-[1.08rem] leading-relaxed text-ink/75 md:col-span-7 md:text-[1.2rem] lg:col-span-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease, delay: 0.55 }}
+            transition={{ duration: 1, ease, delay: d + 0.55 }}
           >
             {hero.lead}
           </motion.p>
@@ -124,7 +125,7 @@ export default function Hero() {
             className="flex flex-wrap items-center gap-3 md:col-span-5 md:justify-end lg:col-span-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease, delay: 0.7 }}
+            transition={{ duration: 1, ease, delay: d + 0.7 }}
           >
             <Magnetic>
               <Button href="#contatti" variant="ink">
@@ -141,7 +142,7 @@ export default function Hero() {
           className="mt-12 grid grid-cols-2 items-center gap-4 border-t border-line pt-5 text-[0.92rem] md:mt-16 md:grid-cols-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
+          transition={{ duration: 1, delay: d + 0.9 }}
         >
           <div className="flex items-center gap-2.5">
             <span className="relative flex h-2.5 w-2.5">
