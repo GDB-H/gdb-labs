@@ -8,8 +8,7 @@ export const LOCALES: Locale[] = ['it', 'en'];
 export const site = {
   name: 'Gabriele Boffa',
   brand: 'GDB Labs',
-  // TODO: inserire l'indirizzo reale a cui ricevere le richieste
-  email: 'gabriele.boffa@example.com',
+  email: 'gdblabs.info@gmail.com',
   // Lasciare vuoto per nascondere il link
   linkedin: '',
   github: '',
